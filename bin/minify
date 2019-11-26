@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+$files = [
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php'
+];
+
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+$minify = new \Hawk\Minify\MinifyStarter();
+
+echo "\n";
+echo "Start minify...\n";
+echo $minify->getSeparator();
+$minify->squeeze();
+echo $minify->getSeparator();
