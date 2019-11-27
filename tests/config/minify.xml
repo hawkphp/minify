@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config name="Minify">
+    <description>Minify code</description>
+    <pathFrom>src</pathFrom>
+    <pathTo>deploy</pathTo>
+    <handlers>
+        <handle>space</handle>
+        <handle>tabulation</handle>
+        <handle>break</handle>
+    </handlers>
+    <extensions>
+        <ext>php</ext>
+        <ext>js</ext>
+        <ext>css</ext>
+    </extensions>
+</config>
