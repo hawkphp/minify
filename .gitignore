@@ -3,5 +3,3 @@ composer.lock
 .git
 .idea
 composer.phar
-.phpunit.result.cache
-.tmp
