@@ -13,20 +13,14 @@ class MinifyStarter
     const SEPARATOR = "=========================================================";
 
     /**
-     *
      * @throws \Exception
      */
     public function squeeze()
     {
-        try {
-            $this->checkRequirements();
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            throw $e;
-        }
+        $this->checkRequirements();
 
         $runner = new Runner();
-        $runner->init();
+        $runner->toBegin();
     }
 
     /**
@@ -48,9 +42,9 @@ class MinifyStarter
             );
         }
 
-        if (PHP_VERSION_ID < 50500) {
+        if (PHP_VERSION_ID < 50400) {
             throw new TerminateException(
-                'Minify requires PHP version 5.5 or greater.' . PHP_EOL
+                'Minify requires PHP version 5.4 or greater.' . PHP_EOL
             );
         }
     }
