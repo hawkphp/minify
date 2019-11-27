@@ -62,6 +62,6 @@ class XmlReader
      */
     public function hasElement($name)
     {
-        return $this->xml->{$name}->count();
+        return isset($this->xml[$name]);
     }
 }
