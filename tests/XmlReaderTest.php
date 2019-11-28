@@ -12,10 +12,10 @@ use PHPUnit\Framework\TestCase;
 class XmlReaderTest extends TestCase
 {
 
-    public function xmlFactory()
+    public function getXmlReaderFactory()
     {
         $xml = new XmlReader();
-        $file = realpath(__DIR__) . '/config/minify.xml';
+        $file = realpath(__DIR__) . '/assets/config/minify.xml';
         $xml->load($file);
 
         return $xml;
@@ -23,7 +23,55 @@ class XmlReaderTest extends TestCase
 
     public function testLoadXml()
     {
-        $xml = $this->xmlFactory();
+        $xml = $this->getXmlReaderFactory();
         $this->assertEquals('Minify code', $xml->getXml()->description);
+    }
+
+    public function testConfigElementPaths()
+    {
+        $xml = $this->getXmlReaderFactory();
+        $this->assertEquals("src", $xml->getXml()->pathFrom);
+        $this->assertEquals("deploy", $xml->getXml()->pathTo);
+    }
+
+    public function testConfigElementHandlers()
+    {
+        $xml = $this->getXmlReaderFactory();
+
+        $this->assertEquals(array(
+            'handler' => array(
+                'space',
+                'tabulation',
+                'break'
+            )
+        ), $xml->toArray('handlers'));
+    }
+
+    public function testConfigElementExtensions()
+    {
+        $xml = $this->getXmlReaderFactory();
+
+        $this->assertEquals(array(
+            'ext' => array(
+                'php',
+                'js',
+                'css'
+            )
+        ), $xml->toArray('extensions'));
+    }
+
+    public function testHasElement()
+    {
+        $xml = $this->getXmlReaderFactory();
+
+        $this->assertTrue($xml->hasElement('pathFrom'));
+        $this->assertFalse($xml->hasElement('pathFake'));
+    }
+
+    public function testToArray()
+    {
+        $xml = $this->getXmlReaderFactory();
+        $handlers = $xml->toArray('handlers');
+        $this->assertEquals(array('space', 'tabulation', 'break'), $handlers['handler']);
     }
 }
