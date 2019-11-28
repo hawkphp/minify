@@ -4,9 +4,9 @@
     <pathFrom>src</pathFrom>
     <pathTo>deploy</pathTo>
     <handlers>
-        <handle>space</handle>
-        <handle>tabulation</handle>
-        <handle>break</handle>
+        <handler>space</handler>
+        <handler>tabulation</handler>
+        <handler>break</handler>
     </handlers>
     <extensions>
         <ext>php</ext>
