@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Minify code a before deployment
+ *
+ * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
+ * @license    http://mit-license.org
+ * @link       https://github.com/hawkphp/predeploy
+ */
+
 namespace Hawk\Minify;
 
 use Hawk\Minify\Exceptions\TerminateException;
@@ -11,74 +19,51 @@ use Hawk\Minify\Exceptions\TerminateException;
 class BuilderFileMap
 {
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @var array
      */
-    private $files = [];
+    private $files = array();
 
     /**
-     * BuilderFileMap constructor.
-     * @param $config
+     * @param $rootPath
      * @throws TerminateException
      */
-    public function __construct($config)
+    public function scan($rootPath)
     {
-        $this->config = $config;
-
-        if (!is_array($this->config->extensions) || !count($this->config->extensions)) {
-            throw new TerminateException("File extension not specified");
-        }
-
-        if ($this->config->pathFrom === null || $this->config->pathFrom === '') {
+        if ($rootPath === null || $rootPath === '' || is_dir($rootPath) === false) {
             throw new TerminateException("File path not specified");
         }
+
+        $this->scanAndSaveFiles($rootPath);
     }
 
     /**
-     *
+     * Recursive scan
+     * @param $path
      */
-    public function scan()
+    protected function scanAndSaveFiles($path)
     {
-        $this->scanAndSaveFiles($this->config->pathFrom);
-    }
+        $files = scandir($path);
 
-    /**
-     * @param string $rootPath
-     */
-    protected function scanAndSaveFiles($rootPath)
-    {
-        $files = scandir($rootPath);
+        if ($files === false) {
+            return;
+        }
 
         foreach ($files as $file) {
-            $filename = $rootPath . "/" . $file;
+            $file = $path . "/" . $file;
 
-            if (is_dir($filename)) {
-                $this->scanAndSaveFiles($filename);
+            if (in_array($file, array(".", ".."))) {
                 continue;
             }
 
-            if ($this->isFileExtAllow($file) && file_exists($filename)) {
-                $this->addFile($filename);
+            if (is_dir($file)) {
+                $this->scanAndSaveFiles($file);
+                continue;
             }
+
+            $this->addFile($file);
         }
     }
 
-    /**
-     * @param $file
-     * @return bool
-     */
-    protected function isFileExtAllow($file)
-    {
-        if (in_array($this->config->extensions, pathinfo($file, PATHINFO_EXTENSION))) {
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * @return array
@@ -89,12 +74,15 @@ class BuilderFileMap
     }
 
     /**
-     * @param string $file
+     * @param $file
+     * @return $this
      */
     protected function addFile($file)
     {
         if (file_exists($file)) {
             $this->files[] = $file;
         }
+
+        return $this;
     }
 }
