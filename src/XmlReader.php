@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Minify code a before deployment
+ *
+ * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
+ * @license    http://mit-license.org
+ * @link       https://github.com/hawkphp/predeploy
+ */
+
 namespace Hawk\Minify;
 
 /**
@@ -58,10 +66,25 @@ class XmlReader
 
     /**
      * @param $name
-     * @return int count the children of elements
+     * @return int
      */
     public function hasElement($name)
     {
-        return isset($this->xml[$name]);
+        return (bool)$this->xml->{$name}->count();
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function toArray($name)
+    {
+        $data = array();
+
+        foreach ((array)$this->xml->{$name} as $index => $node) {
+            $data[$index] = (is_object($node)) ? $this->toArray($node) : $node;
+        }
+
+        return $data;
     }
 }
