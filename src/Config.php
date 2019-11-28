@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Prepare deploy 2019
+ * Minify code a before deployment
+ *
+ * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
+ * @license    http://mit-license.org/
+ * @link        https://github.com/hawkphp/predeploy
+ */
+
 namespace Hawk\Minify;
 
 /**
@@ -61,7 +70,7 @@ class Config extends \ArrayAccessible
         if (file_exists($xmlConfigFile) === true) {
             $this->applyXmlConfig($xmlConfigFile);
         } else {
-            $this->applyDefaultConfig();
+            $this->getDefaultSettings();
         }
     }
 
@@ -92,15 +101,17 @@ class Config extends \ArrayAccessible
     }
 
     /**
-     * Default configuration
+     * Default settings
      */
-    public function applyDefaultConfig()
+    public function getDefaultSettings()
     {
-        $this->data['description'] = 'Minify code';
-        $this->data['pathFrom'] = 'src';
-        $this->data['pathTo'] = 'deploy';
-        $this->data['handlers'] = ['space', 'tabulation', 'break'];
-        $this->data['extensions'] = ['php'];
-        $this->data['packing'] = false;
+        return [
+            'description' => 'Minify code',
+            'pathFrom' => 'src',
+            'pathTo' => 'deploy',
+            'handlers' => ['space', 'tabulation', 'break'],
+            'extensions' => ['php'],
+            'packing' => false
+        ];
     }
 }
