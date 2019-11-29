@@ -49,11 +49,11 @@ class BuilderFileMap
         }
 
         foreach ($files as $file) {
-            $file = $path . "/" . $file;
-
-            if (in_array($file, array(".", ".."))) {
+            if ($file === "." || $file === "..") {
                 continue;
             }
+
+            $file = $path . "/" . $file;
 
             if (is_dir($file)) {
                 $this->scanAndSaveFiles($file);
@@ -63,7 +63,6 @@ class BuilderFileMap
             $this->addFile($file);
         }
     }
-
 
     /**
      * @return array
