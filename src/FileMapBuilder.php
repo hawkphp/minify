@@ -13,10 +13,10 @@ namespace Hawk\Minify;
 use Hawk\Minify\Exceptions\TerminateException;
 
 /**
- * Class BuilderFileMap
+ * Class FileMapBuilder
  * @package Hawk\Minify
  */
-class BuilderFileMap
+class FileMapBuilder
 {
     /**
      * @var array
