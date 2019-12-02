@@ -10,6 +10,9 @@
 
 namespace Hawk\Minify;
 
+use ArrayAccess;
+use IteratorAggregate;
+
 /**
  * Class Config
  * @property string pathFrom
@@ -18,7 +21,7 @@ namespace Hawk\Minify;
  * @property array handlers
  * @package Hawk\Minify
  */
-class Config extends \ArrayAccessible
+class Config implements ArrayAccess, IteratorAggregate
 {
     /**
      * @var array
@@ -34,7 +37,7 @@ class Config extends \ArrayAccessible
         $this->init($settings);
 
         if (is_array($settings)) {
-            parent::__construct($settings);
+            $this->data = $settings;
         }
     }
 
@@ -80,22 +83,22 @@ class Config extends \ArrayAccessible
         $xml = new XmlReader($xmlFile);
 
         $this->data['description'] = ($xml->hasElement('description'))
-            ? $xml->getElement('description') : 'Minify code';
+            ? (string)$xml->getElement('description') : 'Minify code';
 
         $this->data['pathFrom'] = ($xml->hasElement('pathFrom'))
-            ? $xml->getElement('pathFrom') : 'src';
+            ? (string)$xml->getElement('pathFrom') : 'src';
 
         $this->data['pathTo'] = ($xml->hasElement('pathTo'))
-            ? $xml->getElement('pathTo') : 'deploy';
+            ? (string)$xml->getElement('pathTo') : 'deploy';
 
         $this->data['handlers'] = ($xml->hasElement('handlers'))
-            ? $xml->getElement('handlers') : ['space', 'tabulation', 'break'];
+            ? $xml->toArray('handlers', 'handler') : ['space', 'tabulation', 'break'];
 
         $this->data['extensions'] = ($xml->hasElement('extensions'))
-            ? $xml->getElement('extensions') : ['php'];
+            ? $xml->toArray('extensions', 'ext') : ['php'];
 
         $this->data['packing'] = ($xml->hasElement('packing'))
-            ? $xml->getElement('packing') : false;
+            ? (bool)$xml->getElement('packing') : false;
     }
 
     /**
@@ -107,9 +110,56 @@ class Config extends \ArrayAccessible
             'description' => 'Minify code',
             'pathFrom' => 'src',
             'pathTo' => 'deploy',
-            'handlers' => ['space', 'tabulation', 'break'],
-            'extensions' => ['php'],
+            'handlers' => array('space', 'tabulation', 'break'),
+            'extensions' => array('php'),
             'packing' => false
         ]);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return \array_key_exists($offset, $this->data);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->data[$offset];
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (null === $offset) {
+            $this->data[] = $value;
+        } else {
+            $this->data[$offset] = $value;
+        }
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->data[$offset]);
+    }
+
+    /**
+     * @return \ArrayIterator|\Traversable
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->data);
     }
 }
