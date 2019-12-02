@@ -1,6 +1,6 @@
 <?php
 
-namespace Hawk\Tests\Psr7;
+namespace Hawk\Tests\Minify;
 
 use Hawk\Minify\FileMapBuilder;
 use PHPUnit\Framework\TestCase;
@@ -11,6 +11,9 @@ use PHPUnit\Framework\TestCase;
  */
 class FileMapBuilderTest extends TestCase
 {
+    /**
+     * @return FileMapBuilder
+     */
     public function getBuilderFactory()
     {
         return new FileMapBuilder();
@@ -26,7 +29,6 @@ class FileMapBuilderTest extends TestCase
             '/home/ru/www/predeploy/tests/assets/src/MinifyStarter.php',
             '/home/ru/www/predeploy/tests/assets/src/css/common.css',
             '/home/ru/www/predeploy/tests/assets/src/js/common.js',
-            'asd'
         );
 
         $this->assertEquals($files, $builder->getFiles());
