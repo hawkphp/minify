@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Prepare deploy 2019
  * Minify code a before deployment
  *
  * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
- * @license    http://mit-license.org/
- * @link        https://github.com/hawkphp/predeploy
+ * @license    http://mit-license.org
+ * @link       https://github.com/hawkphp/predeploy
  */
 
 namespace Hawk\Minify;
@@ -16,6 +15,7 @@ namespace Hawk\Minify;
  * @property string pathFrom
  * @property string pathTo
  * @property array extensions
+ * @property array handlers
  * @package Hawk\Minify
  */
 class Config extends \ArrayAccessible
@@ -27,13 +27,15 @@ class Config extends \ArrayAccessible
 
     /**
      * Config constructor.
-     * @param array $array
+     * @param string|array|null $settings
      */
-    public function __construct(array $array = [])
+    public function __construct($settings = null)
     {
-        $this->init();
+        $this->init($settings);
 
-        parent::__construct($array);
+        if (is_array($settings)) {
+            parent::__construct($settings);
+        }
     }
 
     /**
@@ -59,18 +61,14 @@ class Config extends \ArrayAccessible
     }
 
     /**
-     *
+     * @param string|null $xmlSettingsFile
      */
-    protected function init()
+    protected function init($xmlSettingsFile)
     {
-        $defaultPath = realpath(__DIR__ . '/../../../');
-        $defaultFile = 'minify.hawk.xml';
-        $xmlConfigFile = $defaultPath . $defaultFile;
-
-        if (file_exists($xmlConfigFile) === true) {
-            $this->applyXmlConfig($xmlConfigFile);
+        if (is_string($xmlSettingsFile) && file_exists($xmlSettingsFile) === true) {
+            $this->applyXmlConfig($xmlSettingsFile);
         } else {
-            $this->getDefaultSettings();
+            $this->applyDefaultSettings();
         }
     }
 
@@ -82,7 +80,7 @@ class Config extends \ArrayAccessible
         $xml = new XmlReader($xmlFile);
 
         $this->data['description'] = ($xml->hasElement('description'))
-            ? $xml->getElement('description') : '';
+            ? $xml->getElement('description') : 'Minify code';
 
         $this->data['pathFrom'] = ($xml->hasElement('pathFrom'))
             ? $xml->getElement('pathFrom') : 'src';
@@ -103,15 +101,15 @@ class Config extends \ArrayAccessible
     /**
      * Default settings
      */
-    public function getDefaultSettings()
+    public function applyDefaultSettings()
     {
-        return [
+        $this->data = array_merge($this->data, [
             'description' => 'Minify code',
             'pathFrom' => 'src',
             'pathTo' => 'deploy',
             'handlers' => ['space', 'tabulation', 'break'],
             'extensions' => ['php'],
             'packing' => false
-        ];
+        ]);
     }
 }
