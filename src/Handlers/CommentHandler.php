@@ -13,10 +13,10 @@ namespace Hawk\Minify\Handlers;
 use Hawk\Minify\Interfaces\HandlerInterface;
 
 /**
- * Class SpaceHandler
+ * Class CommentHandler
  * @package Hawk\Minify\Handlers
  */
-class SpaceHandler implements HandlerInterface
+class CommentHandler implements HandlerInterface
 {
     public function findAndClear()
     {
