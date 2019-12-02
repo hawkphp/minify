@@ -2,18 +2,18 @@
 
 namespace Hawk\Tests\Psr7;
 
-use Hawk\Minify\BuilderFileMap;
+use Hawk\Minify\FileMapBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class BuilderFileMapTest
+ * Class FileMapBuilderTest
  * @package Hawk\Tests\Psr7
  */
-class BuilderFileMapTest extends TestCase
+class FileMapBuilderTest extends TestCase
 {
     public function getBuilderFactory()
     {
-        return new BuilderFileMap();
+        return new FileMapBuilder();
     }
 
     public function testScanPathAndCompareFiles()
@@ -26,6 +26,7 @@ class BuilderFileMapTest extends TestCase
             '/home/ru/www/predeploy/tests/assets/src/MinifyStarter.php',
             '/home/ru/www/predeploy/tests/assets/src/css/common.css',
             '/home/ru/www/predeploy/tests/assets/src/js/common.js',
+            'asd'
         );
 
         $this->assertEquals($files, $builder->getFiles());
