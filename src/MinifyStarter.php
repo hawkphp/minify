@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Minify code a before deployment
+ *
+ * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
+ * @license    http://mit-license.org
+ * @link       https://github.com/hawkphp/predeploy
+ */
+
 namespace Hawk\Minify;
 
 use Hawk\Minify\Exceptions\TerminateException;
@@ -13,13 +21,17 @@ class MinifyStarter
     const SEPARATOR = "=========================================================";
 
     /**
+     * @throws TerminateException
      * @throws \Exception
      */
     public function squeeze()
     {
         $this->checkRequirements();
 
-        $runner = new Runner();
+        $xmlConfigPath = realpath(__DIR__ . '/../../../') . 'minify.hawk.xml';
+        $config = new Config($xmlConfigPath);
+
+        $runner = new Runner($config);
         $runner->toBegin();
     }
 
