@@ -54,7 +54,7 @@ class Runner
      */
     protected function processAndCopy($filePath)
     {
-        $file = new File($filePath, $this->getNewFilePath($filePath));
+        $file = new File($filePath, $this->getFilePathTo($filePath));
         $file->read();
 
         if (in_array($file->getExt(), $this->config->extensions) && is_array($this->config->handlers)) {
@@ -75,15 +75,15 @@ class Runner
 
     /**
      * @param string $filePath
+     * @param null $path
      * @return string
      */
-    protected function getNewFilePath($filePath)
+    protected function getFilePathTo($filePath, $path = null)
     {
-        $path = realpath(__DIR__ . '/../../../') . $this->config->pathTo . "/";
-        $path .= pathinfo($filePath, PATHINFO_FILENAME);
+        $path = is_null($path) ? realpath(__DIR__ . '/../../../') : $path;
+        $path .= $this->config->pathTo . "/";
 
-
-        return $path . pathinfo($filePath, PATHINFO_FILENAME);
+        return $path . pathinfo($filePath, PATHINFO_BASENAME);
     }
 
     /**
@@ -94,12 +94,10 @@ class Runner
     {
         $ext = pathinfo($file, PATHINFO_EXTENSION);
 
-        if (in_array($this->config->extensions, $ext)) {
+        if (in_array($ext, $this->config->extensions)) {
             return true;
         }
 
         return false;
     }
-
-
 }
