@@ -75,14 +75,19 @@ class XmlReader
 
     /**
      * @param string $name
+     * @param string|null $sub
      * @return mixed
      */
-    public function toArray($name)
+    public function toArray($name, $sub = null)
     {
         $data = array();
 
         foreach ((array)$this->xml->{$name} as $index => $node) {
             $data[$index] = (is_object($node)) ? $this->toArray($node) : $node;
+        }
+
+        if (is_string($sub) && $sub !== '') {
+            return $data[$sub];
         }
 
         return $data;
