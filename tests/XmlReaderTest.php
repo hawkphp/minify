@@ -1,6 +1,6 @@
 <?php
 
-namespace Hawk\Tests\Psr7;
+namespace Hawk\Tests\Minify;
 
 use Hawk\Minify\XmlReader;
 use PHPUnit\Framework\TestCase;
@@ -39,12 +39,10 @@ class XmlReaderTest extends TestCase
         $xml = $this->getXmlReaderFactory();
 
         $this->assertEquals(array(
-            'handler' => array(
-                'space',
-                'tabulation',
-                'break'
-            )
-        ), $xml->toArray('handlers'));
+            'space',
+            'tabulation',
+            'break'
+        ), $xml->toArray('handlers','handler'));
     }
 
     public function testConfigElementExtensions()
@@ -52,12 +50,10 @@ class XmlReaderTest extends TestCase
         $xml = $this->getXmlReaderFactory();
 
         $this->assertEquals(array(
-            'ext' => array(
-                'php',
-                'js',
-                'css'
-            )
-        ), $xml->toArray('extensions'));
+            'php',
+            'js',
+            'css'
+        ), $xml->toArray('extensions', 'ext'));
     }
 
     public function testHasElement()
@@ -71,7 +67,7 @@ class XmlReaderTest extends TestCase
     public function testToArray()
     {
         $xml = $this->getXmlReaderFactory();
-        $handlers = $xml->toArray('handlers');
-        $this->assertEquals(array('space', 'tabulation', 'break'), $handlers['handler']);
+        $handlers = $xml->toArray('handlers', 'handler');
+        $this->assertEquals(array('space', 'tabulation', 'break'), $handlers);
     }
 }
