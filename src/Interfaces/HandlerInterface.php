@@ -6,7 +6,7 @@
  *
  * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
  * @license    http://mit-license.org/
- * @link        https://github.com/hawkphp/predeploy
+ * @link       https://github.com/hawkphp/predeploy
  */
 
 namespace Hawk\Minify\Interfaces;
@@ -17,5 +17,5 @@ namespace Hawk\Minify\Interfaces;
  */
 interface HandlerInterface
 {
-    public function clear();
+    public function findAndClear();
 }
