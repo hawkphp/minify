@@ -42,6 +42,12 @@ class File
      */
     public function copy()
     {
+        $pathTo = pathinfo($this->fileTo, PATHINFO_DIRNAME);
+
+        if (!is_dir($pathTo)) {
+            mkdir($pathTo, 0775, true);
+        }
+
         if (!copy($this->fileFrom, $this->fileTo)) {
             throw new TerminateException('Error copying file');
         }
@@ -49,18 +55,19 @@ class File
         return $this;
     }
 
-
     /**
      * @return $this
      */
     public function write()
     {
-        if (is_file($this->fileTo) === false) {
+        if (!pathinfo($this->fileTo, PATHINFO_EXTENSION)) {
             throw new \InvalidArgumentException("Parameter 'pathTo' is not a file");
         }
 
-        if (!is_dir($this->getPath())) {
-            mkdir($this->getPath(), 0775, true);
+        $pathTo = pathinfo($this->fileTo, PATHINFO_DIRNAME);
+
+        if (!is_dir($pathTo)) {
+            mkdir($pathTo, 0775, true);
         }
 
         file_put_contents($this->fileTo, $this->getResource());
@@ -91,7 +98,7 @@ class File
      */
     public function getFileName()
     {
-        return pathinfo($this->fileFrom, PATHINFO_FILENAME);
+        return pathinfo($this->fileFrom, PATHINFO_BASENAME);
     }
 
     /**
