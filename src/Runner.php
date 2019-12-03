@@ -90,7 +90,7 @@ class Runner
      * @param $file
      * @return bool
      */
-    protected function isFileExtAllow($file)
+    protected function isAllowFileExt($file)
     {
         $ext = pathinfo($file, PATHINFO_EXTENSION);
 

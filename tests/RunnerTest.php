@@ -12,9 +12,14 @@ use PHPUnit\Framework\TestCase;
  */
 class RunnerTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $configFile;
+
     protected function setUp()
     {
-
+        $this->configFile = realpath(__DIR__) . "/assets/config/minify.xml";
     }
 
     /**
@@ -22,8 +27,13 @@ class RunnerTest extends TestCase
      */
     public function getRunnerFactory()
     {
-        $config = new Config(__DIR__ . "/assets/config/minify.xml");
+        $config = new Config($this->configFile);
         return new Runner($config);
+    }
+
+    public function testConfigFileExists()
+    {
+        $this->assertFileExists($this->configFile);
     }
 
     public function testGetNewFilePath()
@@ -42,7 +52,7 @@ class RunnerTest extends TestCase
     public function testIsFileExtAllowTrue()
     {
         $runner = $this->getRunnerFactory();
-        $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isFileExtAllow');
+        $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isAllowFileExt');
         $runnerIsFileExtAllow->setAccessible(true);
 
         $dir = realpath(__DIR__);
@@ -61,7 +71,7 @@ class RunnerTest extends TestCase
     public function testIsFileExtAllowFalse()
     {
         $runner = $this->getRunnerFactory();
-        $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isFileExtAllow');
+        $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isAllowFileExt');
         $runnerIsFileExtAllow->setAccessible(true);
 
         $filePath = realpath(__DIR__) . '/assets/src/Xyz.xss';
