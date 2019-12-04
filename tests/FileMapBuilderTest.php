@@ -26,9 +26,9 @@ class FileMapBuilderTest extends TestCase
         $builder->scan($filePath);
 
         $files = array(
-            '/home/ru/www/predeploy/tests/assets/src/MinifyStarter.php',
-            '/home/ru/www/predeploy/tests/assets/src/css/common.css',
-            '/home/ru/www/predeploy/tests/assets/src/js/common.js',
+            $filePath . '/MinifyStarter.php',
+            $filePath . '/css/common.css',
+            $filePath . '/js/common.js',
         );
 
         $this->assertEquals($files, $builder->getFiles());
