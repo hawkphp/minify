@@ -44,7 +44,7 @@ class Runner
 
         if (is_array($files) && count($files) > 0) {
             foreach ($builder->getFiles() as $file) {
-                $this->processAndCopy($file);
+                $this->process($file);
             }
         }
     }
@@ -53,23 +53,49 @@ class Runner
      * @param $filePathFrom
      * @throws Exceptions\TerminateException
      */
-    protected function processAndCopy($filePathFrom)
+    protected function process($filePathFrom)
     {
         $file = (new FileFactory())->createFile($filePathFrom, $this->createFilePathTo($filePathFrom));
 
         if (in_array($file->getExt(), $this->config->extensions) && is_array($this->config->handlers)) {
             $handlerFactory = new HandlerFactory();
-            $pipeline = new Pipeline($file->getExt(), 'findAndClear');
+            $pipeline = new Pipeline($file->getExt(), 'process');
+
             if (is_array($this->config->handlers) && count($this->config->handlers) > 0) {
+                $sizeBefore = mb_strlen($file->getResource());
                 foreach ($this->config->handlers as $index => $name) {
                     $pipeline->through($handlerFactory->createHandler($name));
                 }
                 $pipeline->run();
+
                 $file->setResource($pipeline->getValue())->write();
+                print(sprintf(
+                    "Copied ..................... %s ... (Before: %s, After: %s)\n",
+                    $file->getFileName(),
+                    $sizeBefore,
+                    mb_strlen($pipeline->getValue())
+                ));
             }
         } else {
             $file->copy();
+            print(sprintf("Copied ..................... %s \n", $file->getFileName()));
         }
+    }
+
+    /**
+     * @param $bytes
+     * @param int $precision
+     * @return string
+     */
+    public function getFormat($bytes, $precision = 2)
+    {
+        $units = array('b', 'kb', 'mb', 'gb');
+
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
     /**
