@@ -18,8 +18,12 @@ use Hawk\Minify\Interfaces\HandlerInterface;
  */
 class BreakHandler implements HandlerInterface
 {
-    public function findAndClear()
+    /**
+     * @param string $value
+     * @return mixed
+     */
+    public function process($value)
     {
-
+        return str_replace(array("\r\n", "\r", "\n"), '', $value);
     }
 }

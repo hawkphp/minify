@@ -18,8 +18,12 @@ use Hawk\Minify\Interfaces\HandlerInterface;
  */
 class SpaceHandler implements HandlerInterface
 {
-    public function findAndClear()
+    /**
+     * @param string $value
+     * @return mixed|string|string[]|null
+     */
+    public function process($value)
     {
-
+        return preg_replace("/ {2,}/g", " ", $value);
     }
 }

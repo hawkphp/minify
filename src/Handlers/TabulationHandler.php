@@ -18,8 +18,12 @@ use Hawk\Minify\Interfaces\HandlerInterface;
  */
 class TabulationHandler implements HandlerInterface
 {
-    public function findAndClear()
+    /**
+     * @param string $value
+     * @return mixed|string
+     */
+    public function process($value)
     {
-
+        return trim(preg_replace('/\t+/g', '', $value));
     }
 }
