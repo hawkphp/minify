@@ -10,6 +10,7 @@
 
 namespace Hawk\Minify;
 
+use Hawk\Minify\Factory\FileFactory;
 use Hawk\Minify\Factory\HandlerFactory;
 
 /**
@@ -25,7 +26,7 @@ class Runner
 
     /**
      * Runner constructor.
-     * @param  Config|null $config
+     * @param Config|null $config
      */
     public function __construct($config = null)
     {
@@ -49,13 +50,12 @@ class Runner
     }
 
     /**
-     * @param $filePath
+     * @param $filePathFrom
      * @throws Exceptions\TerminateException
      */
-    protected function processAndCopy($filePath)
+    protected function processAndCopy($filePathFrom)
     {
-        $file = new File($filePath, $this->getFilePathTo($filePath));
-        $file->read();
+        $file = (new FileFactory())->createFile($filePathFrom, $this->createFilePathTo($filePathFrom));
 
         if (in_array($file->getExt(), $this->config->extensions) && is_array($this->config->handlers)) {
             $handlerFactory = new HandlerFactory();
@@ -64,7 +64,6 @@ class Runner
                 foreach ($this->config->handlers as $index => $name) {
                     $pipeline->through($handlerFactory->createHandler($name));
                 }
-
                 $pipeline->run();
                 $file->setResource($pipeline->getValue())->write();
             }
@@ -78,7 +77,7 @@ class Runner
      * @param null $path
      * @return string
      */
-    protected function getFilePathTo($filePath, $path = null)
+    protected function createFilePathTo($filePath, $path = null)
     {
         $path = is_null($path) ? realpath(__DIR__ . '/../../../') : $path;
         $path .= $this->config->pathTo . "/";

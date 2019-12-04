@@ -65,7 +65,6 @@ class RunnerTest extends TestCase
 
         $filePath = $dir . '/assets/src/Baz.js';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
-
     }
 
     public function testIsFileExtAllowFalse()
@@ -78,4 +77,9 @@ class RunnerTest extends TestCase
         $this->assertFalse($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
     }
 
+    public function testToBegin()
+    {
+        $runner = new Runner();
+        $runner->toBegin();
+    }
 }
