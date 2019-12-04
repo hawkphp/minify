@@ -13,27 +13,27 @@ class File
     /**
      * @var string|null
      */
-    private $fileFrom;
+    private $filePathFrom;
 
     /**
      * @var string|null
      */
-    private $fileTo;
+    private $filePathTo;
 
     /**
-     * @var string
+     * @var resource|string
      */
     private $resource;
 
     /**
      * File constructor.
-     * @param null $fileFrom
-     * @param null $fileTo
+     * @param string|null $filePathFrom
+     * @param string|null $filePathTo
      */
-    public function __construct($fileFrom = null, $fileTo = null)
+    public function __construct($filePathFrom = null, $filePathTo = null)
     {
-        $this->fileFrom = $fileFrom;
-        $this->fileTo = $fileTo;
+        $this->filePathFrom = $filePathFrom;
+        $this->filePathTo = $filePathTo;
     }
 
     /**
@@ -42,13 +42,13 @@ class File
      */
     public function copy()
     {
-        $pathTo = pathinfo($this->fileTo, PATHINFO_DIRNAME);
+        $pathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
 
         if (!is_dir($pathTo)) {
             mkdir($pathTo, 0775, true);
         }
 
-        if (!copy($this->fileFrom, $this->fileTo)) {
+        if (!copy($this->filePathFrom, $this->filePathTo)) {
             throw new TerminateException('Error copying file');
         }
 
@@ -60,17 +60,17 @@ class File
      */
     public function write()
     {
-        if (!pathinfo($this->fileTo, PATHINFO_EXTENSION)) {
+        if (!pathinfo($this->filePathTo, PATHINFO_EXTENSION)) {
             throw new \InvalidArgumentException("Parameter 'pathTo' is not a file");
         }
 
-        $pathTo = pathinfo($this->fileTo, PATHINFO_DIRNAME);
+        $pathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
 
         if (!is_dir($pathTo)) {
             mkdir($pathTo, 0775, true);
         }
 
-        file_put_contents($this->fileTo, $this->getResource());
+        file_put_contents($this->filePathTo, $this->getResource());
 
         return $this;
     }
@@ -80,15 +80,15 @@ class File
      */
     public function read()
     {
-        if (is_string($this->fileFrom) === false || $this->fileFrom === '') {
+        if (is_string($this->filePathFrom) === false || $this->filePathFrom === '') {
             throw new \InvalidArgumentException("File path is not a string or is empty");
         }
 
-        if (file_exists($this->fileFrom) === false) {
-            throw new \InvalidArgumentException(sprintf("Invalid file path %s", $this->fileFrom));
+        if (file_exists($this->filePathFrom) === false) {
+            throw new \InvalidArgumentException(sprintf("Invalid file path %s", $this->filePathFrom));
         }
 
-        $this->resource = file_get_contents($this->fileFrom);
+        $this->resource = file_get_contents($this->filePathFrom);
 
         return $this;
     }
@@ -98,7 +98,7 @@ class File
      */
     public function getFileName()
     {
-        return pathinfo($this->fileFrom, PATHINFO_BASENAME);
+        return pathinfo($this->filePathFrom, PATHINFO_BASENAME);
     }
 
     /**
@@ -106,7 +106,7 @@ class File
      */
     public function getPath()
     {
-        return pathinfo($this->fileFrom, PATHINFO_DIRNAME);
+        return pathinfo($this->filePathFrom, PATHINFO_DIRNAME);
     }
 
     /**
@@ -114,7 +114,7 @@ class File
      */
     public function getExt()
     {
-        return pathinfo($this->fileFrom, PATHINFO_EXTENSION);
+        return pathinfo($this->filePathFrom, PATHINFO_EXTENSION);
     }
 
     /**
@@ -138,36 +138,36 @@ class File
     /**
      * @return string|null
      */
-    public function getFileTo()
+    public function getFilePathTo()
     {
-        return $this->fileTo;
+        return $this->filePathTo;
     }
 
     /**
-     * @param $fileTo
+     * @param $filePathTo
      * @return $this
      */
-    public function setFileTo($fileTo)
+    public function setFilePathTo($filePathTo)
     {
-        $this->fileTo = $fileTo;
+        $this->filePathTo = $filePathTo;
         return $this;
     }
 
     /**
      * @return string|null
      */
-    public function getFileFrom()
+    public function getFilePathFrom()
     {
-        return $this->fileFrom;
+        return $this->filePathFrom;
     }
 
     /**
-     * @param $fileFrom
+     * @param $filePathFrom
      * @return $this
      */
-    public function setFileFrom($fileFrom)
+    public function setFilePathFrom($filePathFrom)
     {
-        $this->fileFrom = $fileFrom;
+        $this->filePathFrom = $filePathFrom;
         return $this;
     }
 }
