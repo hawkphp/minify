@@ -64,10 +64,10 @@ class File
             throw new \InvalidArgumentException("Parameter 'pathTo' is not a file");
         }
 
-        $pathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
-
-        if (!is_dir($pathTo)) {
-            mkdir($pathTo, 0775, true);
+        $filePathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
+        if (!is_dir($filePathTo)) {
+            echo "\n".$filePathTo."\n";
+            mkdir($filePathTo, 0775, true);
         }
 
         file_put_contents($this->filePathTo, $this->getResource());
