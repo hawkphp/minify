@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Prepare deploy 2019
  * Minify code a before deployment
  *
  * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
@@ -17,5 +16,9 @@ namespace Hawk\Minify\Interfaces;
  */
 interface HandlerInterface
 {
-    public function findAndClear();
+    /**
+     * @param string $value
+     * @return mixed
+     */
+    public function process($value);
 }
