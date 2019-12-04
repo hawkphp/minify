@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class FileMapBuilderTest
- * @package Hawk\Tests\Psr7
+ * @package Hawk\Tests\Minify
  */
 class FileMapBuilderTest extends TestCase
 {
