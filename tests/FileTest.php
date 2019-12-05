@@ -11,15 +11,21 @@ use PHPUnit\Framework\TestCase;
  */
 class FileTest extends TestCase
 {
-
+    /**
+     * @var string|null
+     */
     private $fileFrom;
+
+    /**
+     * @var string|null
+     */
     private $fileTo;
 
     public function setUp()
     {
-        $dir = realpath(__DIR__);
-        $this->fileFrom = $dir . "/assets/src/js/common.js";
-        $this->fileTo = $dir . "/assets/deploy/js/common.js";
+        $testPath = realpath(__DIR__);
+        $this->fileFrom = $testPath . "/assets/src/js/common.js";
+        $this->fileTo = $testPath . "/assets/deploy/js/common.js";
 
         if (file_exists($this->fileTo)) {
             unlink($this->fileTo);

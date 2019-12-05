@@ -25,7 +25,7 @@ class RunnerTest extends TestCase
     /**
      * @return Runner
      */
-    public function getRunnerFactory()
+    public function createFactory()
     {
         $config = new Config($this->configFile);
         return new Runner($config);
@@ -38,8 +38,8 @@ class RunnerTest extends TestCase
 
     public function testGetNewFilePath()
     {
-        $runner = $this->getRunnerFactory();
-        $runnerNewFilePath = new \ReflectionMethod($runner, 'getFilePathTo');
+        $runner = $this->createFactory();
+        $runnerNewFilePath = new \ReflectionMethod($runner, 'createFilePathTo');
         $runnerNewFilePath->setAccessible(true);
 
         $filePath = realpath(__DIR__) . '/assets/src/MinifyStarter.php';
@@ -51,35 +51,29 @@ class RunnerTest extends TestCase
 
     public function testIsFileExtAllowTrue()
     {
-        $runner = $this->getRunnerFactory();
+        $runner = $this->createFactory();
         $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isAllowFileExt');
         $runnerIsFileExtAllow->setAccessible(true);
 
-        $dir = realpath(__DIR__);
+        $testPath = realpath(__DIR__);
 
-        $filePath = $dir . '/assets/src/Foo.php';
+        $filePath = $testPath . '/assets/src/Foo.php';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
 
-        $filePath = $dir . '/assets/src/Bar.css';
+        $filePath = $testPath . '/assets/src/Bar.css';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
 
-        $filePath = $dir . '/assets/src/Baz.js';
+        $filePath = $testPath . '/assets/src/Baz.js';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
     }
 
     public function testIsFileExtAllowFalse()
     {
-        $runner = $this->getRunnerFactory();
+        $runner = $this->createFactory();
         $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isAllowFileExt');
         $runnerIsFileExtAllow->setAccessible(true);
 
         $filePath = realpath(__DIR__) . '/assets/src/Xyz.xss';
         $this->assertFalse($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
-    }
-
-    public function testToBegin()
-    {
-        $runner = new Runner();
-        $runner->toBegin();
     }
 }
