@@ -18,7 +18,7 @@ use Hawk\Minify\Exceptions\TerminateException;
  */
 class MinifyStarter
 {
-    const SEPARATOR = "=========================================================";
+    const SEPARATOR = "===================================================================================";
 
     /**
      * @throws TerminateException
@@ -28,7 +28,7 @@ class MinifyStarter
     {
         $this->checkRequirements();
 
-        $xmlConfigPath = realpath(__DIR__ . '/../../../') . 'minify.hawk.xml';
+        $xmlConfigPath = realpath(__DIR__ . '/../../../../') . '/minify.hawk.xml';
         $config = new Config($xmlConfigPath);
 
         $runner = new Runner($config);
