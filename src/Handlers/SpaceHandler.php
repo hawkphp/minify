@@ -24,6 +24,6 @@ class SpaceHandler implements HandlerInterface
      */
     public function process($value)
     {
-        return preg_replace("/ {2,}/g", " ", $value);
+        return preg_replace("/ {2,}/", " ", $value);
     }
 }

@@ -24,6 +24,6 @@ class TabulationHandler implements HandlerInterface
      */
     public function process($value)
     {
-        return trim(preg_replace('/\t+/g', '', $value));
+        return trim(preg_replace('/\t+/', '', $value));
     }
 }
