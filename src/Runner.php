@@ -19,6 +19,7 @@ use Hawk\Minify\Factory\HandlerFactory;
  */
 class Runner
 {
+    private $maxLength = 0;
     /**
      * @var Config|null
      */
@@ -41,6 +42,12 @@ class Runner
         $builder = new FileMapBuilder();
         $builder->scan($this->config->pathFrom);
         $files = $builder->getFiles();
+        foreach ($files as $file) {
+            $file = pathinfo($file, PATHINFO_BASENAME);
+            if (mb_strlen($file) > $this->maxLength) {
+                $this->maxLength = mb_strlen($file);
+            }
+        }
 
         if (is_array($files) && count($files) > 0) {
             foreach ($builder->getFiles() as $file) {
@@ -69,18 +76,38 @@ class Runner
                 $pipeline->run();
 
                 $file->setResource($pipeline->getValue())->write();
-                print(sprintf(
-                    "Copied ..................... %s ... (Before: %s, After: %s)\n",
+                $sizeAfter = mb_strlen($pipeline->getValue());
+
+                print(sprintf("Copied ... %s......%s [Before: %s, After: %s]" . PHP_EOL,
                     $file->getFileName(),
-                    $sizeBefore,
-                    mb_strlen($pipeline->getValue())
+                    $this->getDots($filePathFrom),
+                    $this->getFormat($sizeBefore),
+                    $this->getFormat($sizeAfter)
                 ));
             }
         } else {
             $file->copy();
-            print(sprintf("Copied ..................... %s \n", $file->getFileName()));
+            print(sprintf("Copied ... %s \n", $file->getFileName()));
         }
     }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    public function getDots($filename)
+    {
+        $filename = pathinfo($filename, PATHINFO_BASENAME);
+        $length = mb_strlen($filename);
+
+        if ($length < $this->maxLength) {
+            $fillCount = $this->maxLength - $length;
+
+            return str_repeat(".", $fillCount);
+        }
+        return '';
+    }
+
 
     /**
      * @param $bytes
@@ -95,7 +122,7 @@ class Runner
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision) . $units[$pow];
     }
 
     /**
@@ -105,8 +132,8 @@ class Runner
      */
     protected function createFilePathTo($filePath, $path = null)
     {
-        $path = is_null($path) ? realpath(__DIR__ . '/../../../') : $path;
-        $path .= $this->config->pathTo . "/";
+        $path = is_null($path) ? realpath(__DIR__ . '/../../../../') : $path;
+        $path .= "/" . $this->config->pathTo . "/";
 
         return $path . pathinfo($filePath, PATHINFO_BASENAME);
     }
