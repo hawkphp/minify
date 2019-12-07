@@ -64,14 +64,16 @@ class Config implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * @param string|null $xmlSettingsFile
+     * @param string|null $settings
      */
-    protected function init($xmlSettingsFile)
+    protected function init($settings)
     {
-        if (is_string($xmlSettingsFile) && file_exists($xmlSettingsFile) === true) {
-            $this->applyXmlConfig($xmlSettingsFile);
+        if (is_string($settings) && file_exists($settings) === true) {
+            $this->applyXmlConfig($settings);
+            echo "Config loaded success: " . $settings . PHP_EOL;
         } else {
             $this->applyDefaultSettings();
+            echo "Loaded default settings : " . $settings . PHP_EOL;
         }
     }
 
