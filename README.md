@@ -35,7 +35,7 @@ Example config file: minify.hawk.xml
 * `pathTo` - the path to the <deploy> folder.
 * `extensions` - types of files to be minify
 
-##Add to your composer:
+## Add to your composer:
 ```
   "scripts": {
     "deploy": [
