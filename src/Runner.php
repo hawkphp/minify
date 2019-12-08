@@ -11,7 +11,10 @@
 namespace Hawk\Minify;
 
 use Hawk\Minify\Factory\FileFactory;
-use Hawk\Minify\Factory\HandlerFactory;
+use Hawk\Minify\Handlers\BreakHandler;
+use Hawk\Minify\Handlers\CommentsHandler;
+use Hawk\Minify\Handlers\SpaceHandler;
+use Hawk\Minify\Handlers\TabulationHandler;
 
 /**
  * Class Runner
@@ -64,27 +67,25 @@ class Runner
     {
         $file = (new FileFactory())->createFile($filePathFrom, $this->createFilePathTo($filePathFrom));
 
-        if (in_array($file->getExt(), $this->config->extensions) && is_array($this->config->handlers)) {
-            $handlerFactory = new HandlerFactory();
-            $pipeline = new Pipeline($file->getExt(), 'process');
+        if (in_array($file->getExt(), $this->config->extensions)) {
+            $pipeline = new Pipeline($file->getResource(), 'process');
+            $sizeBefore = mb_strlen($file->getResource());
 
-            if (is_array($this->config->handlers) && count($this->config->handlers) > 0) {
-                $sizeBefore = mb_strlen($file->getResource());
-                foreach ($this->config->handlers as $index => $name) {
-                    $pipeline->through($handlerFactory->createHandler($name));
-                }
-                $pipeline->run();
+            $pipeline->through(new CommentsHandler())
+                ->through(new BreakHandler())
+                ->through(new TabulationHandler())
+                ->through(new SpaceHandler())
+                ->run();
 
-                $file->setResource($pipeline->getValue())->write();
-                $sizeAfter = mb_strlen($pipeline->getValue());
+            $file->setResource($pipeline->getValue())->write();
+            $sizeAfter = mb_strlen($pipeline->getValue());
 
-                print(sprintf("Copied ... %s......%s [Before: %s, After: %s]" . PHP_EOL,
-                    $file->getFileName(),
-                    $this->getDots($filePathFrom),
-                    $this->getFormat($sizeBefore),
-                    $this->getFormat($sizeAfter)
-                ));
-            }
+            print(sprintf("Copied ... %s......%s [Before: %s, After: %s]" . PHP_EOL,
+                $file->getFileName(),
+                $this->getDots($filePathFrom),
+                File::getSizeFormat($sizeBefore),
+                File::getSizeFormat($sizeAfter)
+            ));
         } else {
             $file->copy();
             print(sprintf("Copied ... %s \n", $file->getFileName()));
@@ -108,23 +109,6 @@ class Runner
         return '';
     }
 
-
-    /**
-     * @param $bytes
-     * @param int $precision
-     * @return string
-     */
-    public function getFormat($bytes, $precision = 2)
-    {
-        $units = array('b', 'kb', 'mb', 'gb');
-
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
-
-        return round($bytes, $precision) . $units[$pow];
-    }
-
     /**
      * @param string $filePath
      * @param null $path
@@ -133,9 +117,9 @@ class Runner
     protected function createFilePathTo($filePath, $path = null)
     {
         $path = is_null($path) ? realpath(__DIR__ . '/../../../../') : $path;
-        $path .= "/" . $this->config->pathTo . "/";
+        $path .= "/" . $this->config->pathTo;
 
-        return $path . pathinfo($filePath, PATHINFO_BASENAME);
+        return $path . str_replace($this->config->pathFrom, '', $filePath);
     }
 
     /**
