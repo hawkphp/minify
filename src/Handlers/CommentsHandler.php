@@ -19,7 +19,7 @@ use Hawk\Minify\Interfaces\HandlerInterface;
 class CommentsHandler implements HandlerInterface
 {
     /**
-     * Remove "*", "#", "//" php comments
+     * Remove "*", "#", "//" (php comments)
      *
      * @param string $value
      * @return string
