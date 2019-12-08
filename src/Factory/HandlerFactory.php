@@ -3,7 +3,7 @@
 namespace Hawk\Minify\Factory;
 
 use Hawk\Minify\Handlers\BreakHandler;
-use Hawk\Minify\Handlers\CommentHandler;
+use Hawk\Minify\Handlers\CommentsHandler;
 use Hawk\Minify\Handlers\SpaceHandler;
 use Hawk\Minify\Handlers\TabulationHandler;
 
@@ -15,7 +15,7 @@ class HandlerFactory
 {
     /**
      * @param string $name
-     * @return BreakHandler|CommentHandler|SpaceHandler|TabulationHandler
+     * @return BreakHandler|CommentsHandler|SpaceHandler|TabulationHandler
      */
     public function createHandler($name)
     {
@@ -24,8 +24,8 @@ class HandlerFactory
                 return new SpaceHandler();
             case "break":
                 return new BreakHandler();
-            case "comment":
-                return new CommentHandler();
+            case "comments":
+                return new CommentsHandler();
             case "tabulation":
                 return new TabulationHandler();
             default:
