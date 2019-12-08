@@ -3,11 +3,6 @@
     <description>Minify code</description>
     <pathFrom>src</pathFrom>
     <pathTo>deploy</pathTo>
-    <handlers>
-        <handler>space</handler>
-        <handler>tabulation</handler>
-        <handler>break</handler>
-    </handlers>
     <extensions>
         <ext>php</ext>
         <ext>js</ext>
