@@ -12,8 +12,10 @@ Minify code a before deployment
 
 Installation:
 
-```bash
-composer require hawkphp/minify --dev
+```
+    "require-dev": {
+        "hawkphp/minify": "^1.1.0"
+    }
 ```
 
 Example config file: minify.hawk.xml
