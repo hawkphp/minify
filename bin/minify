@@ -15,9 +15,13 @@ foreach ($files as $file) {
 
 $minify = new \Hawk\Minify\MinifyStarter();
 
-echo PHP_EOL;
-echo $minify->getSeparator();
-echo "Start minify..." . PHP_EOL;
-echo $minify->getSeparator();
+echo PHP_EOL . "#" . $minify->getSeparator() . "
+#    █───█─███─█──█─███─███─██─██    
+#    ██─██──█──██─█──█──█────███     
+#    █─█─█──█──█─██──█──███───█      
+#    █───█──█──█──█──█──█─────█      
+#    █───█─███─█──█─███─█─────█      
+#    ─────────────────────────█    
+#" . $minify->getSeparator() . PHP_EOL;
 $minify->squeeze();
-echo $minify->getSeparator();
+echo $minify->getSeparator() . PHP_EOL;
