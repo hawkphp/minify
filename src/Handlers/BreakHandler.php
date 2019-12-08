@@ -24,6 +24,6 @@ class BreakHandler implements HandlerInterface
      */
     public function process($value)
     {
-        return str_replace(array("\r\n", "\r", "\n"), '', $value);
+        return str_replace(array("\r\n", "\r", "\n"), " ", $value);
     }
 }

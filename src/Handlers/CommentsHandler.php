@@ -13,17 +13,22 @@ namespace Hawk\Minify\Handlers;
 use Hawk\Minify\Interfaces\HandlerInterface;
 
 /**
- * Class CommentHandler
+ * Class CommentsHandler
  * @package Hawk\Minify\Handlers
  */
-class CommentHandler implements HandlerInterface
+class CommentsHandler implements HandlerInterface
 {
     /**
+     * Remove "*", "#", "//" php comments
+     *
      * @param string $value
-     * @return mixed
+     * @return string
      */
     public function process($value)
     {
-        return str_replace('(\/\/(.*?)(\n|$|\r|(\r\n)))|(\/\*(.*?)\*\/)', '', $value);
+        $value = preg_replace('!/\*.*?\*/!s', " ", $value);
+        $value = preg_replace("/\/\/ .*(\n|\r\n)/", " ", $value);
+
+        return preg_replace("/# .*(\n|\r\n)/", " ", $value);
     }
 }

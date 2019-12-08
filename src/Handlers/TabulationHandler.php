@@ -20,10 +20,10 @@ class TabulationHandler implements HandlerInterface
 {
     /**
      * @param string $value
-     * @return mixed|string
+     * @return string
      */
     public function process($value)
     {
-        return trim(preg_replace('/\t+/', '', $value));
+        return trim(preg_replace('/\t+/', " ", $value));
     }
 }
