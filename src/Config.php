@@ -93,11 +93,8 @@ class Config implements ArrayAccess, IteratorAggregate
         $this->data['pathTo'] = ($xml->hasElement('pathTo'))
             ? (string)$xml->getElement('pathTo') : 'deploy';
 
-        $this->data['handlers'] = ($xml->hasElement('handlers'))
-            ? $xml->toArray('handlers', 'handler') : ['space', 'tabulation', 'break'];
-
         $this->data['extensions'] = ($xml->hasElement('extensions'))
-            ? $xml->toArray('extensions', 'ext') : ['php'];
+            ? $xml->toArray('extensions', 'ext') : array('php');
 
         $this->data['packing'] = ($xml->hasElement('packing'))
             ? (bool)$xml->getElement('packing') : false;
@@ -112,7 +109,6 @@ class Config implements ArrayAccess, IteratorAggregate
             'description' => 'Minify code',
             'pathFrom' => 'src',
             'pathTo' => 'deploy',
-            'handlers' => array('space', 'tabulation', 'break'),
             'extensions' => array('php'),
             'packing' => false
         ]);
