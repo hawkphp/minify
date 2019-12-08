@@ -66,7 +66,7 @@ class File
 
         $filePathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
         if (!is_dir($filePathTo)) {
-            echo "\n".$filePathTo."\n";
+            echo "\n" . $filePathTo . "\n";
             mkdir($filePathTo, 0775, true);
         }
 
@@ -169,5 +169,21 @@ class File
     {
         $this->filePathFrom = $filePathFrom;
         return $this;
+    }
+
+    /**
+     * @param $bytes
+     * @param int $precision
+     * @return string
+     */
+    public static function getSizeFormat($bytes, $precision = 2)
+    {
+        $units = array('b', 'kb', 'mb', 'gb');
+
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+
+        return round($bytes, $precision) . $units[$pow];
     }
 }
