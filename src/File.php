@@ -66,7 +66,6 @@ class File
 
         $filePathTo = pathinfo($this->filePathTo, PATHINFO_DIRNAME);
         if (!is_dir($filePathTo)) {
-            echo "\n" . $filePathTo . "\n";
             mkdir($filePathTo, 0775, true);
         }
 
