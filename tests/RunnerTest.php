@@ -27,7 +27,10 @@ class RunnerTest extends TestCase
      */
     public function createFactory()
     {
+        ob_start();
         $config = new Config($this->configFile);
+        ob_end_clean();
+
         return new Runner($config);
     }
 
@@ -43,8 +46,8 @@ class RunnerTest extends TestCase
         $runnerNewFilePath->setAccessible(true);
 
         $filePath = realpath(__DIR__) . '/assets/src/MinifyStarter.php';
-        $assetsPath = realpath(__DIR__) . "/assets/";
-        $newFilePath = $runnerNewFilePath->invokeArgs($runner, array($filePath, $assetsPath));
+        $assetsPath = realpath(__DIR__) . "/assets";
+        $newFilePath = $runnerNewFilePath->invokeArgs($runner, array($filePath, $assetsPath)) . "/MinifyStarter.php";
 
         $this->assertEquals(realpath(__DIR__) . '/assets/deploy/MinifyStarter.php', $newFilePath);
     }
@@ -55,15 +58,15 @@ class RunnerTest extends TestCase
         $runnerIsFileExtAllow = new \ReflectionMethod($runner, 'isAllowFileExt');
         $runnerIsFileExtAllow->setAccessible(true);
 
-        $testPath = realpath(__DIR__);
+        $testPath = realpath(__DIR__) . '/assets/src/';
 
-        $filePath = $testPath . '/assets/src/Foo.php';
+        $filePath = $testPath . 'Foo.php';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
 
-        $filePath = $testPath . '/assets/src/Bar.css';
+        $filePath = $testPath . 'Bar.css';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
 
-        $filePath = $testPath . '/assets/src/Baz.js';
+        $filePath = $testPath . 'Baz.js';
         $this->assertTrue($runnerIsFileExtAllow->invokeArgs($runner, array($filePath)));
     }
 

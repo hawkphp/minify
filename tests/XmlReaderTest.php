@@ -34,17 +34,6 @@ class XmlReaderTest extends TestCase
         $this->assertEquals("deploy", $xml->getXml()->pathTo);
     }
 
-    public function testConfigElementHandlers()
-    {
-        $xml = $this->getXmlReaderFactory();
-
-        $this->assertEquals(array(
-            'space',
-            'tabulation',
-            'break'
-        ), $xml->toArray('handlers','handler'));
-    }
-
     public function testConfigElementExtensions()
     {
         $xml = $this->getXmlReaderFactory();
@@ -67,7 +56,7 @@ class XmlReaderTest extends TestCase
     public function testToArray()
     {
         $xml = $this->getXmlReaderFactory();
-        $handlers = $xml->toArray('handlers', 'handler');
-        $this->assertEquals(array('space', 'tabulation', 'break'), $handlers);
+        $handlers = $xml->toArray('extensions', 'ext');
+        $this->assertEquals(array('php', 'js', 'css'), $handlers);
     }
 }

@@ -116,6 +116,10 @@ class Runner
      */
     protected function createFilePathTo($filePath, $path = null)
     {
+        if ($path !== null) {
+            return $path . "/" . $this->config->pathTo;
+        }
+
         $path = is_null($path) ? realpath(__DIR__ . '/../../../../') : $path;
         $path .= "/" . $this->config->pathTo;
 
