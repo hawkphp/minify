@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Minify code a before deployment
+ *
+ * @author     Ruslan Baimurzaev <baimurzaev@gmail.com>
+ * @license    http://mit-license.org
+ * @link       https://github.com/hawkphp/predeploy
+ */
+
 namespace Hawk\Minify\Factory;
 
 use Hawk\Minify\File;
@@ -18,8 +26,7 @@ class FileFactory
     public function createFile($filePathFrom, $filePathTo)
     {
         $file = new File($filePathFrom, $filePathTo);
-        $file->read();
 
-        return $file;
+        return  $file->read();
     }
 }
