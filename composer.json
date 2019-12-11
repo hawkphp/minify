@@ -36,8 +36,6 @@
   },
   "require": {
     "php": ">=5.4.0",
-    "ext-tokenizer": "*",
-    "ext-xmlwriter": "*",
     "ext-simplexml": "*"
   },
   "bin": [
