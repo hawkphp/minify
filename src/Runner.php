@@ -42,7 +42,7 @@ class Runner
      */
     public function toBegin()
     {
-        $builder = new FileMapBuilder();
+        $builder = new MapFileBuilder();
         $builder->scan($this->config->pathFrom);
         $files = $builder->getFiles();
         foreach ($files as $file) {

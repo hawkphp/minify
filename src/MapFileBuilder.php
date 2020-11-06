@@ -16,7 +16,7 @@ use Hawk\Minify\Exceptions\TerminateException;
  * Class FileMapBuilder
  * @package Hawk\Minify
  */
-class FileMapBuilder
+class MapFileBuilder
 {
     /**
      * @var array

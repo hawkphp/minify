@@ -2,7 +2,7 @@
 
 namespace Hawk\Tests\Minify;
 
-use Hawk\Minify\FileMapBuilder;
+use Hawk\Minify\MapFileBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,11 +12,11 @@ use PHPUnit\Framework\TestCase;
 class FileMapBuilderTest extends TestCase
 {
     /**
-     * @return FileMapBuilder
+     * @return MapFileBuilder
      */
     public function getBuilderFactory()
     {
-        return new FileMapBuilder();
+        return new MapFileBuilder();
     }
 
     public function testScanPathAndCompareFiles()
